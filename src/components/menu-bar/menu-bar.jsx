@@ -461,13 +461,6 @@ class MenuBar extends React.Component {
                 id="gui.menuBar.remix"
             />
         );
-        const newProjectMessage = (
-            <FormattedMessage
-                defaultMessage="New"
-                description="Menu bar item for creating a new project"
-                id="gui.menuBar.new"
-            />
-        );
         const remixButton = (
             <Button
                 className={classNames(
@@ -561,6 +554,12 @@ class MenuBar extends React.Component {
                             onRequestOpen={this.props.onClickSettings}
                             settingsMenuOpen={this.props.settingsMenuOpen}
                         />)}
+                        <Button
+                            className={styles.menuBarButton}
+                            onClick={this.handleClickNew}
+                        >
+                            ＋新規作成
+                        </Button>
                         {(this.props.canManageFiles) && (
                             <MenuLabel
                                 open={this.props.fileMenuOpen}
@@ -591,12 +590,6 @@ class MenuBar extends React.Component {
                                     open={this.props.fileMenuOpen}
                                     place={this.props.isRtl ? 'left' : 'right'}
                                 >
-                                    <MenuItem
-                                        isRtl={this.props.isRtl}
-                                        onClick={this.handleClickNew}
-                                    >
-                                        {newProjectMessage}
-                                    </MenuItem>
                                     {this.props.onClickNewWindow && (
                                         <MenuItem
                                             isRtl={this.props.isRtl}
