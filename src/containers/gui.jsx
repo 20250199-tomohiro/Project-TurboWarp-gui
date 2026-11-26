@@ -212,7 +212,6 @@ const ConnectedGUI = injectIntl(connect(
 // the hierarchy of HOC constructor calls clearer here; it has nothing to do with redux's
 // ability to compose reducers.
 const WrappedGui = compose(
-    collaborationRoomHOC,
     LocalizationHOC,
     ErrorBoundaryHOC('Top Level App'),
     TWThemeManagerHOC, // componentDidUpdate() needs to run very early for icons to update immediately
@@ -223,6 +222,7 @@ const WrappedGui = compose(
     TitledHOC,
     ProjectSaverHOC,
     vmListenerHOC,
+    collaborationRoomHOC,
     vmManagerHOC,
     SBFileUploaderHOC,
     cloudManagerHOC
