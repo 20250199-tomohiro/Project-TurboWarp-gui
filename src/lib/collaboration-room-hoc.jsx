@@ -26,6 +26,7 @@ const collaborationRoomHOC = WrappedComponent => {
             this.timer = null;
             this.eventCursor = 0;
             this.localDirty = false;
+            this.localVersion = 0;
             this.applyingRemote = false;
             this.saveTimer = null;
             this.mounted = false;
@@ -102,8 +103,9 @@ const collaborationRoomHOC = WrappedComponent => {
             }
         }
         handleProjectChanged () {
-            if (!this.roomCode || this.applyingRemote || this.state.syncing) return;
+            if (!this.roomCode || this.applyingRemote) return;
             this.localDirty = true;
+            this.localVersion++;
             this.setState({notice: '変更を同期しています…'});
             if (this.saveTimer) window.clearTimeout(this.saveTimer);
             this.saveTimer = window.setTimeout(() => this.saveLocalProject(), 1200);
@@ -111,6 +113,7 @@ const collaborationRoomHOC = WrappedComponent => {
         async saveLocalProject () {
             if (!this.mounted || !this.localDirty || !this.props.vm || this.state.syncing) return;
             this.setState({syncing: true, error: ''});
+            const versionBeingSaved = this.localVersion;
             try {
                 const project = await this.props.vm.saveProjectSb3();
                 const response = await this.request('/project', {
@@ -118,7 +121,7 @@ const collaborationRoomHOC = WrappedComponent => {
                     headers: {'Content-Type': 'application/octet-stream', 'X-Collab-Revision': String(this.state.revision)},
                     body: project
                 });
-                this.localDirty = false;
+                this.localDirty = this.localVersion !== versionBeingSaved;
                 this.setState({revision: Number(response.revision), notice: '共有作品を同期しました'});
             } catch (error) {
                 if (error.status === 409) {
@@ -130,7 +133,13 @@ const collaborationRoomHOC = WrappedComponent => {
                     this.setState({error: error.message});
                 }
             } finally {
-                if (this.mounted) this.setState({syncing: false});
+                if (this.mounted) {
+                    this.setState({syncing: false});
+                    if (this.localDirty && !this.state.error) {
+                        if (this.saveTimer) window.clearTimeout(this.saveTimer);
+                        this.saveTimer = window.setTimeout(() => this.saveLocalProject(), 500);
+                    }
+                }
             }
         }
         async overwriteWithLocalChanges () {
