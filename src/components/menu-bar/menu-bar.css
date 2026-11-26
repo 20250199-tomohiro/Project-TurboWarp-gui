@@ -235,7 +235,7 @@
 }
 
 
-/* Project-TurboWarp navigation row follows the live GUI theme variables. */
+/* Project-TurboWarp navigation: second row stays inside the menu bar flow. */
 .more-navigation {
     position: static;
     display: flex;
@@ -269,24 +269,24 @@
     height: .5rem;
     object-fit: contain;
 }
+.more-navigation[open] {
+    display: contents;
+}
 .more-navigation-menu {
     display: none;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 0;
     flex: 0 0 100%;
     width: 100%;
     min-height: $menu-bar-height;
     box-sizing: border-box;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
     padding: 0 .5rem;
     background-color: $menu-bar-background;
     background-image: $menu-bar-background-image;
     color: $menu-bar-foreground;
     border-top: 1px solid $ui-black-transparent;
-}
-.more-navigation[open] {
-    display: contents;
 }
 .more-navigation[open] .more-navigation-menu {
     display: flex;
@@ -306,46 +306,29 @@
     color: $menu-bar-foreground;
     outline: none;
 }
-/* Keep the account controls on the first row while the menu row is open. */
 .menu-bar:has(.more-navigation[open]) {
-    position: relative;
     height: auto;
     min-height: $menu-bar-height;
-    flex-wrap: wrap;
-    align-content: flex-start;
+    align-items: flex-start;
 }
 .main-menu:has(.more-navigation[open]) {
+    height: auto;
     flex-wrap: wrap;
     align-content: flex-start;
-    width: 100%;
-    padding-right: 12rem;
-}
-.menu-bar:has(.more-navigation[open]) > .account-info-group {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: $menu-bar-height;
-    z-index: 2;
+    min-width: 0;
 }
 .feedback-button {
-    background-color: $ui-primary !important;
-    border-color: $ui-primary !important;
-    color: $ui-white !important;
+    background-color: $menu-bar-background !important;
+    border-color: $menu-bar-foreground !important;
+    color: $menu-bar-foreground !important;
+    height: 34px;
 }
 .feedback-button:hover {
-    background-color: $ui-primary !important;
+    background-color: $menu-bar-background !important;
+    color: $menu-bar-foreground !important;
     filter: brightness(.96);
 }
 @media only screen and (max-width: 700px) {
-    .main-menu:has(.more-navigation[open]) {
-        padding-right: 0;
-    }
-    .menu-bar:has(.more-navigation[open]) > .account-info-group {
-        position: static;
-        order: 2;
-        width: 100%;
-        justify-content: flex-end;
-    }
     .more-navigation-menu {
         overflow-x: auto;
         justify-content: flex-start;
