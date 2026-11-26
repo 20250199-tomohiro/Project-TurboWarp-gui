@@ -1076,18 +1076,22 @@ class MenuBar extends React.Component {
                             </label>
                             <label>
                                 <span>アクセントカラー</span>
-                                <input
-                                    type="color"
-                                    defaultValue={(JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}').accent) || '#FF4C4C'}
+                                <select
+                                    defaultValue={(JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}').accentTheme) || 'red'}
                                     onChange={event => {
                                         const current = JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}');
                                         localStorage.setItem('project-turbowarp-appearance-v2', JSON.stringify({
                                             ...current,
-                                            accent: event.target.value
+                                            accentTheme: event.target.value
                                         }));
                                         window.location.reload();
                                     }}
-                                />
+                                >
+                                    <option value="red">赤</option>
+                                    <option value="purple">紫</option>
+                                    <option value="blue">青</option>
+                                    <option value="rainbow">レインボー</option>
+                                </select>
                             </label>
                         </div>
                     </details>
