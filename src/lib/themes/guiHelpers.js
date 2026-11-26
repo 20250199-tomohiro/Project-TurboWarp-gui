@@ -35,6 +35,12 @@ const evaluateCSS = css => {
  */
 const applyGuiColors = theme => {
     const doc = document.documentElement;
+    if (!window.__mirrorAppearanceStorageSync) {
+        window.__mirrorAppearanceStorageSync = true;
+        window.addEventListener('storage', event => {
+            if (event.key === 'project-turbowarp-appearance-v2') window.location.reload();
+        });
+    }
 
     const defaultGuiColors = Theme.light.getGuiColors();
     for (const [name, value] of Object.entries(defaultGuiColors)) {
