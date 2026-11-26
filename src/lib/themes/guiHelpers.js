@@ -49,10 +49,51 @@ const applyGuiColors = theme => {
 
     const guiColors = theme.getGuiColors();
 
-    // Project-TurboWarp shared appearance preferences override only GUI surfaces/accent.
+    // Apply the same four accent themes provided by TurboWarp.
     try {
         const saved = JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}');
-        const accent = /^#[0-9a-f]{6}$/i.test(saved.accent || '') ? saved.accent : null;
+        const accentTheme = ['red', 'purple', 'blue', 'rainbow'].includes(saved.accentTheme)
+            ? saved.accentTheme
+            : 'red';
+        const accentThemes = {
+            red: {
+                primary: '#ff4c4c', transparent: '#ff4d4d59', light: '#ff4d4d26',
+                dark: 'hsla(0, 42%, 51%, 1)', motion: '#ff4c4c',
+                motionTransparent: '#ff4c4ce6', tertiary: '#cc3333'
+            },
+            purple: {
+                primary: 'hsla(260, 60%, 60%, 1)', transparent: 'hsla(260, 60%, 60%, 0.35)',
+                light: 'hsla(260, 60%, 60%, 0.15)', dark: 'hsla(260, 42%, 51%, 1)',
+                motion: 'hsla(260, 60%, 60%, 1)', motionTransparent: 'hsla(260, 60%, 60%, 0.9)',
+                tertiary: 'hsla(260, 42%, 51%, 1)'
+            },
+            blue: {
+                primary: 'hsla(215, 100%, 65%, 1)', transparent: 'hsla(215, 100%, 65%, 0.35)',
+                light: 'hsla(215, 100%, 65%, 0.15)', dark: 'hsla(215, 60%, 50%, 1)',
+                motion: 'hsla(215, 100%, 65%, 1)', motionTransparent: 'hsla(215, 100%, 65%, 0.35)',
+                tertiary: 'hsla(215, 60%, 50%, 1)'
+            },
+            rainbow: {
+                primary: '#ff4c4c', transparent: '#ff4d4d59', light: '#ff4d4d26',
+                dark: 'hsla(0, 42%, 51%, 1)', motion: '#ff4c4c',
+                motionTransparent: '#ff4c4ce6', tertiary: '#cc3333'
+            }
+        };
+        const accent = accentThemes[accentTheme];
+        Object.assign(guiColors, {
+            'looks-secondary': accent.primary,
+            'looks-transparent': accent.transparent,
+            'looks-light-transparent': accent.light,
+            'looks-secondary-dark': accent.dark,
+            'motion-primary': accent.motion,
+            'motion-primary-transparent': accent.motionTransparent,
+            'motion-tertiary': accent.tertiary
+        });
+        if (accentTheme === 'rainbow') {
+            guiColors['menu-bar-background-image'] = 'linear-gradient(90deg, rgba(255, 0, 0, 0.75) 0%, rgba(255, 154, 0, 0.75) 10%, rgba(208, 222, 33, 0.75) 20%, rgba(79, 220, 74, 0.75) 30%, rgba(63, 218, 216, 0.75) 40%, rgba(47, 201, 226, 0.75) 50%, rgba(28, 127, 238, 0.75) 60%, rgba(95, 21, 242, 0.75) 70%, rgba(186, 12, 248, 0.75) 80%, rgba(251, 7, 217, 0.75) 90%, rgba(255, 0, 0, 0.75) 100%)';
+        } else {
+            delete guiColors['menu-bar-background-image'];
+        }
         if (saved.mode === 'light') {
             Object.assign(guiColors, {
                 'color-scheme': 'light',
@@ -62,7 +103,7 @@ const applyGuiColors = theme => {
                 'ui-modal-background': '#ffffff',
                 'ui-modal-foreground': '#575e75',
                 'text-primary': '#575e75',
-                'menu-bar-background': 'var(--looks-secondary)',
+                'menu-bar-background': accent.primary,
                 'menu-bar-foreground': '#ffffff',
                 'assets-background': '#ffffff',
                 'input-background': '#ffffff',
@@ -88,19 +129,8 @@ const applyGuiColors = theme => {
                 'page-foreground': '#eeeeee'
             });
         }
-        if (accent) {
-            guiColors['looks-secondary'] = accent;
-            guiColors['looks-secondary-dark'] = accent;
-            guiColors['looks-transparent'] = accent + '59';
-            guiColors['looks-light-transparent'] = accent + '26';
-            guiColors['motion-primary'] = accent;
-            guiColors['motion-primary-transparent'] = accent + 'e6';
-            guiColors['motion-tertiary'] = accent;
-            guiColors['ui-modal-header-background'] = accent;
-            if (saved.mode !== 'dark') guiColors['menu-bar-background'] = accent;
-        }
     } catch (e) {
-        // Ignore unavailable storage and preserve TurboWarp's selected theme.
+        // Keep TurboWarp's built-in theme if local storage is unavailable.
     }
 
     for (const [name, value] of Object.entries(guiColors)) {
