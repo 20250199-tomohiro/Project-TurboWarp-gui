@@ -2,7 +2,8 @@
 @import "../../css/units.css";
 @import "../../css/z-index.css";
 
-.menu-bar {
+ .menu-bar {
+    position: relative;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -270,13 +271,17 @@
     object-fit: contain;
 }
 .more-navigation[open] {
-    display: contents;
+    display: flex;
 }
 .more-navigation-menu {
     display: none;
-    flex: 0 0 calc(100% + 190px);
-    width: calc(100% + 190px);
-    margin-right: -190px;
+    position: absolute;
+    z-index: $z-index-menu-bar;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    box-sizing: border-box;
     min-height: $menu-bar-height;
     box-sizing: border-box;
     flex-direction: row;
@@ -308,15 +313,19 @@
     outline: none;
 }
 .menu-bar:has(.more-navigation[open]) {
-    height: auto;
-    min-height: $menu-bar-height;
+    height: calc(#{$menu-bar-height} * 2);
+    min-height: calc(#{$menu-bar-height} * 2);
     align-items: flex-start;
 }
-.main-menu:has(.more-navigation[open]) {
-    height: auto;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    min-width: 0;
+.more-navigation-menu a.new-project-navigation {
+    background-color: $motion-primary;
+    color: white;
+    font-weight: bold;
+}
+.more-navigation-menu a.new-project-navigation:hover,
+.more-navigation-menu a.new-project-navigation:focus-visible {
+    filter: brightness(.94);
+    color: white;
 }
 .feedback-button {
     background-color: $menu-bar-background !important;
