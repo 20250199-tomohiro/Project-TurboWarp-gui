@@ -207,12 +207,19 @@ const collaborationRoomHOC = WrappedComponent => {
             try {
                 const target = this.props.vm.runtime && this.props.vm.runtime.getEditingTarget ?
                     this.props.vm.runtime.getEditingTarget() : null;
+                const selected = document.querySelector('.blocklySelected');
+                const blockElement = selected && (selected.closest('.blocklyDraggable') || selected.closest('[data-id]'));
+                const blockId = blockElement && blockElement.getAttribute('data-id');
+                const runtimeBlock = target && target.blocks && target.blocks._blocks && blockId ?
+                    target.blocks._blocks[blockId] : null;
                 await this.request('/presence', {
                     method: 'PUT',
                     json: {
                         sprite: target && target.getName ? target.getName() : null,
                         target: target && target.id ? target.id : null,
-                        editing: 'プロジェクト編集'
+                        blockId: blockId || null,
+                        blockType: runtimeBlock && runtimeBlock.opcode ? runtimeBlock.opcode : null,
+                        editing: blockId ? 'ブロックを選択中' : 'プロジェクト編集'
                     }
                 });
             } catch (error) {
@@ -285,7 +292,7 @@ const collaborationRoomHOC = WrappedComponent => {
                                         {room && room.members ? room.members.map(member => {
                                             const active = presence.find(person => person.id === member.id);
                                             return <li key={member.id}>{member.username}
-                                                {active && active.state && active.state.sprite ? ' — ' + active.state.sprite + ' を編集中' : ''}
+                                                {active && active.state && active.state.sprite ? ' — ' + active.state.sprite + ' を編集中' : ''}{active && active.state && active.state.blockType ? '（' + active.state.blockType + '）' : ''}
                                             </li>;
                                         }) : <li>読み込み中...</li>}
                                     </ul>
