@@ -537,8 +537,7 @@ class MenuBar extends React.Component {
                                 </MenuBarMenu>
                             </MenuLabel>
                         </div>}
-                        {(this.props.canChangeTheme || this.props.canChangeLanguage) && (<SettingsMenu
-                            canChangeLanguage={this.props.canChangeLanguage}
+                        {(this.props.canChangeTheme || this.props.onClickDesktopSettings) && (<SettingsMenu
                             canChangeTheme={this.props.canChangeTheme}
                             isRtl={this.props.isRtl}
                             onClickDesktopSettings={
