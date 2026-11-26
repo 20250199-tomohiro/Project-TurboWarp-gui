@@ -72,13 +72,6 @@ const AccountNavComponent = ({
                     id="gui.accountMenu.profile"
                 />
             </MenuItemContainer>
-            <MenuItemContainer href="/mystuff/">
-                <FormattedMessage
-                    defaultMessage="My Stuff"
-                    description="Text to link to list of my projects, in the account navigation menu"
-                    id="gui.accountMenu.myStuff"
-                />
-            </MenuItemContainer>
             {isEducator ? (
                 <MenuItemContainer href="/educators/classes/">
                     <FormattedMessage
