@@ -382,4 +382,4 @@
     margin: 7px 0;
 }
 .mirror-theme-popover select { max-width: 125px; }
-.mirror-theme-popover input[type="color"] { width: 42px; height: 30px; padding: 2px; }
+.mirror-theme-popover select { min-width: 125px; }
