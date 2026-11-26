@@ -46,6 +46,31 @@ const applyGuiColors = theme => {
         doc.style.setProperty(`--${name}`, value);
     }
 
+    // Share the active editor theme with same-origin Project-TurboWarp pages.
+    try {
+        const sharedThemeKeys = [
+            'color-scheme',
+            'looks-secondary',
+            'looks-secondary-dark',
+            'menu-bar-background',
+            'menu-bar-foreground',
+            'page-background',
+            'page-foreground',
+            'popover-background',
+            'input-background',
+            'ui-primary',
+            'ui-secondary',
+            'ui-black-transparent'
+        ];
+        const sharedTheme = {};
+        for (const key of sharedThemeKeys) {
+            if (guiColors[key]) sharedTheme[key] = guiColors[key];
+        }
+        localStorage.setItem('project-turbowarp-theme', JSON.stringify(sharedTheme));
+    } catch (e) {
+        // Private browsing or storage restrictions should not break the editor.
+    }
+
     const blockColors = theme.getBlockColors();
     doc.style.setProperty('--editorTheme3-blockText', blockColors.text);
     doc.style.setProperty('--editorTheme3-inputColor', blockColors.textField);
