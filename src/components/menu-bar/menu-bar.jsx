@@ -1054,6 +1054,43 @@ class MenuBar extends React.Component {
                             <a href="/packager">パッケージ化</a>
                         </nav>
                     </details>
+                    <details className={styles.mirrorThemeTools}>
+                        <summary>テーマ設定</summary>
+                        <div className={styles.mirrorThemePopover}>
+                            <label>
+                                <span>表示モード</span>
+                                <select
+                                    defaultValue={(JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}').mode) || 'dark'}
+                                    onChange={event => {
+                                        const current = JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}');
+                                        localStorage.setItem('project-turbowarp-appearance-v2', JSON.stringify({
+                                            ...current,
+                                            mode: event.target.value
+                                        }));
+                                        window.location.reload();
+                                    }}
+                                >
+                                    <option value="light">ライトモード</option>
+                                    <option value="dark">ダークモード</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span>アクセントカラー</span>
+                                <input
+                                    type="color"
+                                    defaultValue={(JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}').accent) || '#FF4C4C'}
+                                    onChange={event => {
+                                        const current = JSON.parse(localStorage.getItem('project-turbowarp-appearance-v2') || '{}');
+                                        localStorage.setItem('project-turbowarp-appearance-v2', JSON.stringify({
+                                            ...current,
+                                            accent: event.target.value
+                                        }));
+                                        window.location.reload();
+                                    }}
+                                />
+                            </label>
+                        </div>
+                    </details>
                 </div>
 
                 <div className={styles.accountInfoGroup}>
