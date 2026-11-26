@@ -222,8 +222,8 @@ const WrappedGui = compose(
     TitledHOC,
     ProjectSaverHOC,
     vmListenerHOC,
-    collaborationRoomHOC,
     vmManagerHOC,
+    collaborationRoomHOC,
     SBFileUploaderHOC,
     cloudManagerHOC
 )(ConnectedGUI);
