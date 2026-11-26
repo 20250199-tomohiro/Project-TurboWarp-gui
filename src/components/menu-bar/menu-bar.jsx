@@ -1032,6 +1032,28 @@ class MenuBar extends React.Component {
                             </Button>
                         </a>
                     </div>
+                    <details className={styles.moreNavigation}>
+                        <summary className={styles.moreNavigationTrigger}>
+                            <img
+                                className={styles.dropdownCaretIcon}
+                                src={dropdownCaret}
+                                draggable={false}
+                                width={8}
+                                height={5}
+                                alt=""
+                            />
+                            <span>もっと見る…</span>
+                        </summary>
+                        <nav className={styles.moreNavigationMenu} aria-label="サイトナビゲーション">
+                            <a href="/">ホーム</a>
+                            <a href="/my">私の作品</a>
+                            <a href="/search">作品を探す</a>
+                            <a href="/friends">フレンド</a>
+                            <a href="/messages">メッセージ</a>
+                            <a href="/collaboration">共同制作</a>
+                            <a href="/packager">パッケージ化</a>
+                        </nav>
+                    </details>
                 </div>
 
                 <div className={styles.accountInfoGroup}>
