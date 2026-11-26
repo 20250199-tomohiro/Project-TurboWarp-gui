@@ -553,12 +553,6 @@ class MenuBar extends React.Component {
                             onRequestOpen={this.props.onClickSettings}
                             settingsMenuOpen={this.props.settingsMenuOpen}
                         />)}
-                        <Button
-                            className={styles.menuBarButton}
-                            onClick={this.handleClickNew}
-                        >
-                            ＋新規作成
-                        </Button>
                         {(this.props.canManageFiles) && (
                             <MenuLabel
                                 open={this.props.fileMenuOpen}
@@ -1037,6 +1031,7 @@ class MenuBar extends React.Component {
                             <span>もっと見る…</span>
                         </summary>
                         <nav className={styles.moreNavigationMenu} aria-label="サイトナビゲーション">
+                            <a className={styles.newProjectNavigation} href="/editor.html">＋新規作成</a>
                             <a href="/">ホーム</a>
                             <a href="/my">私の作品</a>
                             <a href="/search">作品を探す</a>
