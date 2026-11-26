@@ -226,6 +226,17 @@ const collaborationRoomHOC = WrappedComponent => {
                 // Presence is supplementary; keep the editor usable if it fails.
             }
         }
+        async leaveRoom () {
+            if (!window.confirm('共同制作ルームから退出しますか？')) return;
+            try {
+                await this.request('/leave', {method: 'DELETE'});
+                const url = new URL(window.location.href);
+                url.searchParams.delete('collab_room');
+                window.location.assign(url.toString());
+            } catch (error) {
+                this.setState({error: error.message});
+            }
+        }
         async addTodo (event) {
             event.preventDefault();
             const title = this.state.todoText.trim();
@@ -273,9 +284,12 @@ const collaborationRoomHOC = WrappedComponent => {
                         }}>
                             <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                 <strong>共同制作 · {this.roomCode}</strong>
+                                <div style={{display: 'flex', gap: 4}}>
+                                <button type="button" onClick={() => this.leaveRoom()}>退出</button>
                                 <button type="button" onClick={() => this.setState({collapsed: !collapsed})}>
                                     {collapsed ? '開く' : '閉じる'}
                                 </button>
+                                </div>
                             </header>
                             {!collapsed ? (
                                 <React.Fragment>
