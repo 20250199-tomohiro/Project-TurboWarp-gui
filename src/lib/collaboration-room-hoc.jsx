@@ -133,6 +133,23 @@ const collaborationRoomHOC = WrappedComponent => {
                 if (this.mounted) this.setState({syncing: false});
             }
         }
+        async overwriteWithLocalChanges () {
+            try {
+                const latest = await this.request('/project');
+                this.setState({revision: Number(latest.revision), error: ''}, () => this.saveLocalProject());
+            } catch (error) { this.setState({error: error.message}); }
+        }
+        async discardLocalAndLoadShared () {
+            try {
+                const snapshot = await this.request('/project');
+                const bytes = Uint8Array.from(atob(snapshot.data), char => char.charCodeAt(0));
+                this.applyingRemote = true;
+                await this.props.vm.loadProject(bytes);
+                this.applyingRemote = false;
+                this.localDirty = false;
+                this.setState({revision: Number(snapshot.revision), error: '', notice: '共有版を読み込みました'});
+            } catch (error) { this.applyingRemote = false; this.setState({error: error.message}); }
+        }
         async applyRemoteSnapshot () {
             if (this.localDirty || this.state.syncing || !this.props.vm) {
                 this.setState({notice: '他の参加者の変更があります。ローカル変更を保存してから反映します。'});
@@ -248,6 +265,12 @@ const collaborationRoomHOC = WrappedComponent => {
                                 <React.Fragment>
                                     <p aria-live="polite">{syncing ? '同期中…' : notice}</p>
                                     {error ? <p role="alert" style={{color: '#b00020'}}>{error}</p> : null}
+                                    {this.localDirty && error ? (
+                                        <div style={{display: 'flex', flexWrap: 'wrap', gap: 5}}>
+                                            <button type="button" onClick={() => this.overwriteWithLocalChanges()}>自分の変更で共有版を上書き</button>
+                                            <button type="button" onClick={() => this.discardLocalAndLoadShared()}>共有版を読み込む（自分の未保存変更を破棄）</button>
+                                        </div>
+                                    ) : null}
                                     <h4>参加者 ({room && room.members ? room.members.length : 0})</h4>
                                     <ul style={{paddingLeft: 20, margin: '6px 0'}}>
                                         {room && room.members ? room.members.map(member => {
