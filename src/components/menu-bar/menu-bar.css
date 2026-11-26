@@ -274,8 +274,9 @@
 }
 .more-navigation-menu {
     display: none;
-    flex: 0 0 100%;
-    width: 100%;
+    flex: 0 0 calc(100% + 190px);
+    width: calc(100% + 190px);
+    margin-right: -190px;
     min-height: $menu-bar-height;
     box-sizing: border-box;
     flex-direction: row;
