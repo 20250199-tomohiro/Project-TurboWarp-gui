@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import JSZip from '@turbowarp/jszip';
+import log from '../../lib/log';
 import styles from './project-info.css';
 const key = id => 'tw:project-info:' + (id || 'pending');
 class ProjectInfo extends React.Component {
@@ -64,7 +65,7 @@ class ProjectInfo extends React.Component {
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         } catch (e) {
-            console.error('Could not export project info', e);
+            log.error('Could not export project info', e);
         }
     }
     render () {
@@ -84,6 +85,6 @@ class ProjectInfo extends React.Component {
         );
     }
 }
-ProjectInfo.propTypes = {projectId: PropTypes.string, instructions: PropTypes.string, credits: PropTypes.string, vm: PropTypes.object};
+ProjectInfo.propTypes = {projectId: PropTypes.string, instructions: PropTypes.string, credits: PropTypes.string, vm: PropTypes.shape({toJSON: PropTypes.func})};
 const mapStateToProps = state => ({vm: state.scratchGui.vm});
 export default connect(mapStateToProps)(ProjectInfo);
