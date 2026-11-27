@@ -226,6 +226,7 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                                     instructions: typeof parsed.instructions === 'string' ? parsed.instructions.slice(0, 10000) : '',
                                     credits: typeof parsed.credits === 'string' ? parsed.credits.slice(0, 10000) : ''
                                 }));
+                                window.dispatchEvent(new Event('tw:project-info-loaded'));
                             } catch (e) {
                                 // Ignore invalid optional metadata.
                             }
