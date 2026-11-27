@@ -31,9 +31,7 @@ import SettingsStore from '../addons/settings-store-singleton';
 import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
-import ProjectInput from '../components/tw-project-input/project-input.jsx';
-import FeaturedProjects from '../components/tw-featured-projects/featured-projects.jsx';
-import Description from '../components/tw-description/description.jsx';
+import ProjectInfo from '../components/tw-project-info/project-info.jsx';
 import BrowserModal from '../components/browser-modal/browser-modal.jsx';
 import CloudVariableBadge from '../containers/tw-cloud-variable-badge.jsx';
 import TWWindchimeSubmitter from '../containers/tw-windchime-submitter.jsx';
@@ -262,43 +260,23 @@ class Interface extends React.Component {
                             {isBrowserSupported() ? null : (
                                 <BrowserModal isRtl={isRtl} />
                             )}
-                            <div className={styles.section}>
-                                <ProjectInput />
-                            </div>
+                            
                             {hasCloudVariables && projectId !== '0' && (
                                 <div className={styles.section}>
                                     <CloudVariableBadge />
                                 </div>
                             )}
-                            {description.instructions || description.credits ? (
-                                <div className={styles.section}>
-                                    <Description
-                                        instructions={description.instructions}
-                                        credits={description.credits}
-                                        projectId={projectId}
-                                    />
-                                </div>
-                            ) : null}
                             <div className={styles.section}>
-                                <p>
-                                    <FormattedMessage
-                                        // eslint-disable-next-line max-len
-                                        defaultMessage="{APP_NAME} is a Scratch mod that compiles projects to JavaScript to make them run really fast. Try it out by inputting a project ID or URL above or choosing a featured project below."
-                                        description="Description of TurboWarp on the homepage"
-                                        id="tw.home.description"
-                                        values={{
-                                            APP_NAME
-                                        }}
-                                    />
-                                </p>
-                            </div>
-                            <div className={styles.section}>
-                                <FeaturedProjects studio="27205657" />
+                                <ProjectInfo
+                                    projectId={projectId}
+                                    instructions={description.instructions}
+                                    credits={description.credits}
+                                />
                             </div>
                         </React.Fragment>
                     ) : null}
                 </div>
-                {isHomepage && <Footer />}
+
             </div>
         );
     }
