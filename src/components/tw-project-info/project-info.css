@@ -1,0 +1,6 @@
+.container { display: flex; flex-direction: column; gap: 18px; width: 100%; box-sizing: border-box; }
+.field { display: flex; flex-direction: column; gap: 8px; }
+.heading { color: #575e75; font-size: 1.25rem; font-weight: bold; }
+.textarea { width: 100%; min-height: 112px; box-sizing: border-box; resize: vertical; border: 1px solid #d9e2f2; border-radius: 8px; padding: 12px 14px; color: #575e75; background: white; font: inherit; line-height: 1.5; }
+.textarea:focus { outline: 2px solid #4c97ff; outline-offset: 1px; }
+.note { color: #777; font-size: 0.8rem; }
