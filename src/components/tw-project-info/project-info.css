@@ -4,3 +4,7 @@
 .textarea { width: 100%; min-height: 112px; box-sizing: border-box; resize: vertical; border: 1px solid #d9e2f2; border-radius: 8px; padding: 12px 14px; color: #575e75; background: white; font: inherit; line-height: 1.5; }
 .textarea:focus { outline: 2px solid #4c97ff; outline-offset: 1px; }
 .note { color: #777; font-size: 0.8rem; }
+
+.actions { display: flex; justify-content: flex-end; }
+.actions button { border: 0; border-radius: 6px; padding: 10px 16px; color: white; background: #4c97ff; font: inherit; font-weight: bold; cursor: pointer; }
+.actions button:hover { background: #4280d7; }
