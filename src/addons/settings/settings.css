@@ -600,9 +600,9 @@ a:active, a:focus {
     width: 50%;
     min-width: 0;
     max-width: none;
-    /* The app's navigation bar is 58px tall inside the browser viewport. */
-    margin-top: 58px;
-    height: calc(100% - 58px);
+    /* The site header is outside this editor viewport; the parent reserves its height. */
+    margin-top: 0;
+    height: 100%;
     min-height: 0;
     box-sizing: border-box;
     overflow: hidden;
