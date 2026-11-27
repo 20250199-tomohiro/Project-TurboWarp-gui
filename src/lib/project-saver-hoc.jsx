@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import VM from 'scratch-vm';
+import JSZip from '@turbowarp/jszip';
 
 import collectMetadata from '../lib/collect-metadata';
 import log from '../lib/log';
@@ -226,6 +227,19 @@ const ProjectSaverHOC = function (WrappedComponent) {
             // serialized project refers to a newer asset than what
             // we just finished saving).
             const savedVMState = this.props.vm.toJSON();
+            const projectInfoRaw = (() => {
+                try {
+                    return localStorage.getItem('tw:project-info:' + this.props.reduxProjectId) ||
+                        localStorage.getItem('tw:project-info:pending');
+                } catch (e) {
+                    return null;
+                }
+            })();
+            const projectDataPromise = projectInfoRaw ? JSZip.loadAsync(savedVMState)
+                .then(zip => {
+                    zip.file('project-info.json', projectInfoRaw);
+                    return zip.generateAsync({type: 'uint8array'});
+                }) : Promise.resolve(savedVMState);
             return Promise.all(this.props.vm.assets
                 .filter(asset => !asset.clean)
                 .map(
@@ -244,7 +258,8 @@ const ProjectSaverHOC = function (WrappedComponent) {
                     })
                 )
             )
-                .then(() => this.props.onUpdateProjectData(projectId, savedVMState, requestParams))
+                .then(() => projectDataPromise)
+                .then(projectData => this.props.onUpdateProjectData(projectId, projectData, requestParams))
                 .then(response => {
                     this.props.onSetProjectUnchanged();
                     const id = response.id.toString();
