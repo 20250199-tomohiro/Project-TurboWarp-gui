@@ -102,15 +102,16 @@ a {
     flex-direction: row;
     align-items: stretch;
     overflow: hidden;
-    /* Reserve the complete site header above both columns, keeping it visible. */
+    /* The host site header is 58px tall; reserve only that space. */
     box-sizing: border-box;
-    padding-top: 100px;
+    padding-top: 58px;
     background-color: transparent;
 }
 .addon-settings-open > .center {
     flex: 1 1 50%;
     width: auto !important;
     min-width: 0;
-    height: 100%;
+    height: auto;
+    min-height: 0;
     overflow: auto;
 }
