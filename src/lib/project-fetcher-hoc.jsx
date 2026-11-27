@@ -25,6 +25,7 @@ import storage from './storage';
 import {ProjectFetchError} from './tw-load-project-error';
 
 import VM from 'scratch-vm';
+import JSZip from '@turbowarp/jszip';
 import {fetchProjectMeta} from './tw-project-meta-fetcher-hoc.jsx';
 
 // TW: Temporary hack for project tokens
@@ -135,8 +136,22 @@ const ProjectFetcherHOC = function (WrappedComponent) {
             }
 
             return assetPromise
-                .then(projectAsset => {
+                .then(async projectAsset => {
                     if (projectAsset) {
+                        try {
+                            const zip = await JSZip.loadAsync(projectAsset.data);
+                            const infoFile = zip.file('project-info.json');
+                            if (infoFile) {
+                                const parsed = JSON.parse(await infoFile.async('string'));
+                                localStorage.setItem('tw:project-info:pending', JSON.stringify({
+                                    instructions: typeof parsed.instructions === 'string' ? parsed.instructions.slice(0, 10000) : '',
+                                    credits: typeof parsed.credits === 'string' ? parsed.credits.slice(0, 10000) : ''
+                                }));
+                                window.dispatchEvent(new Event('tw:project-info-loaded'));
+                            }
+                        } catch (e) {
+                            // Normal Scratch projects do not contain Project-TurboWarp metadata.
+                        }
                         this.props.onFetchedProjectData(projectAsset.data, loadingState);
                     } else if (projectUrl) {
                         // Treat failure to load as an error
