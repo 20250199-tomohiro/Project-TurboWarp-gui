@@ -141,14 +141,13 @@ const ProjectFetcherHOC = function (WrappedComponent) {
                         try {
                             const zip = await JSZip.loadAsync(projectAsset.data);
                             const infoFile = zip.file('project-info.json');
-                            if (infoFile) {
-                                const parsed = JSON.parse(await infoFile.async('string'));
-                                localStorage.setItem('tw:project-info:pending', JSON.stringify({
-                                    instructions: typeof parsed.instructions === 'string' ? parsed.instructions.slice(0, 10000) : '',
-                                    credits: typeof parsed.credits === 'string' ? parsed.credits.slice(0, 10000) : ''
-                                }));
-                                window.dispatchEvent(new Event('tw:project-info-loaded'));
-                            }
+                            let parsed = {};
+                            if (infoFile) parsed = JSON.parse(await infoFile.async('string'));
+                            localStorage.setItem('tw:project-info:pending', JSON.stringify({
+                                instructions: typeof parsed.instructions === 'string' ? parsed.instructions.slice(0, 10000) : '',
+                                credits: typeof parsed.credits === 'string' ? parsed.credits.slice(0, 10000) : ''
+                            }));
+                            window.dispatchEvent(new Event('tw:project-info-loaded'));
                         } catch (e) {
                             // Normal Scratch projects do not contain Project-TurboWarp metadata.
                         }
