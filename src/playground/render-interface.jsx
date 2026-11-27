@@ -134,7 +134,8 @@ class Interface extends React.Component {
             <div
                 className={classNames(styles.container, {
                     [styles.playerOnly]: isHomepage,
-                    [styles.editor]: isEditor
+                    [styles.editor]: isEditor,
+                    [styles.addonSettingsOpen]: isEditor && this.state.addonSettingsOpen
                 })}
                 dir={isRtl ? 'rtl' : 'ltr'}
             >
