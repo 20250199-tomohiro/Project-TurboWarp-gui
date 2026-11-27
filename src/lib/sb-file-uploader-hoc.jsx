@@ -218,8 +218,8 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 waitForPaint()
                     .then(() => JSZip.loadAsync(data).then(zip => {
                         const infoFile = zip.file('project-info.json');
-                        if (!infoFile) return data;
-                        return infoFile.async('string').then(info => {
+                        const infoPromise = infoFile ? infoFile.async('string') : Promise.resolve('{}');
+                        return infoPromise.then(info => {
                             try {
                                 const parsed = JSON.parse(info);
                                 localStorage.setItem('tw:project-info:pending', JSON.stringify({
