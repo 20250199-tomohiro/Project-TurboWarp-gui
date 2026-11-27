@@ -1,5 +1,6 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
+import JSZip from '@turbowarp/jszip';
 import PropTypes from 'prop-types';
 import {intlShape, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
@@ -215,10 +216,26 @@ const SBFileUploaderHOC = function (WrappedComponent) {
                 // Loading can block the main thread for a long time, or could be extremely quick.
                 // So we want to make sure we show the loading screen at least briefly.
                 waitForPaint()
-                    .then(() => {
+                    .then(() => JSZip.loadAsync(data).then(zip => {
+                        const infoFile = zip.file('project-info.json');
+                        if (!infoFile) return data;
+                        return infoFile.async('string').then(info => {
+                            try {
+                                const parsed = JSON.parse(info);
+                                localStorage.setItem('tw:project-info:pending', JSON.stringify({
+                                    instructions: typeof parsed.instructions === 'string' ? parsed.instructions.slice(0, 10000) : '',
+                                    credits: typeof parsed.credits === 'string' ? parsed.credits.slice(0, 10000) : ''
+                                }));
+                            } catch (e) {
+                                // Ignore invalid optional metadata.
+                            }
+                            return data;
+                        });
+                    }).catch(() => data))
+                    .then(projectData => {
                         // tw: stop when loading new project
                         this.props.vm.quit();
-                        return this.props.vm.loadProject(data);
+                        return this.props.vm.loadProject(projectData);
                     })
                     .then(() => {
                         if (filename) {
