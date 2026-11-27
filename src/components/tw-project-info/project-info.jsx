@@ -14,16 +14,24 @@ class ProjectInfo extends React.Component {
         this.state = {instructions: saved ? saved.instructions || '' : props.instructions || '', credits: saved ? saved.credits || '' : props.credits || ''};
         this.changeInstructions = this.changeInstructions.bind(this);
         this.changeCredits = this.changeCredits.bind(this);
+        this.handleImportedInfo = this.handleImportedInfo.bind(this);
+    }
+    componentDidMount () {
+        window.addEventListener('tw:project-info-loaded', this.handleImportedInfo);
+    }
+    componentWillUnmount () {
+        window.removeEventListener('tw:project-info-loaded', this.handleImportedInfo);
+    }
+    handleImportedInfo () {
+        try {
+            const saved = JSON.parse(localStorage.getItem(key('pending')) || 'null');
+            if (saved) this.setState({instructions: saved.instructions || '', credits: saved.credits || ''});
+        } catch (e) {
+            // Ignore invalid local storage data.
+        }
     }
     componentDidUpdate (prevProps) {
-        if (prevProps.projectId !== this.props.projectId) {
-            try {
-                const saved = JSON.parse(localStorage.getItem(key(this.props.projectId)) || localStorage.getItem(key('pending')) || 'null');
-                if (saved) this.setState({instructions: saved.instructions || '', credits: saved.credits || ''});
-            } catch (e) {
-                // Ignore invalid local storage data.
-            }
-        }
+        if (prevProps.projectId !== this.props.projectId) this.handleImportedInfo();
     }
     save (field, value) {
         const next = Object.assign({}, this.state, {[field]: value});
