@@ -32,6 +32,8 @@ import '../lib/tw-fix-history-api';
 import GUI from './render-gui.jsx';
 import MenuBar from '../components/menu-bar/menu-bar.jsx';
 import ProjectInfo from '../components/tw-project-info/project-info.jsx';
+import AddonSettings from '../addons/settings/settings.jsx';
+import downloadBlob from '../lib/download-blob.js';
 import BrowserModal from '../components/browser-modal/browser-modal.jsx';
 import CloudVariableBadge from '../containers/tw-cloud-variable-badge.jsx';
 import TWWindchimeSubmitter from '../containers/tw-windchime-submitter.jsx';
@@ -46,12 +48,6 @@ import styles from './interface.css';
 
 const isInvalidEmbed = window.parent !== window;
 
-const handleClickAddonSettings = addonId => {
-    // addonId might be a string of the addon to focus on, undefined, or an event (treat like undefined)
-    const path = process.env.ROUTING_STYLE === 'wildcard' ? 'addons' : 'addons.html';
-    const url = `${process.env.ROOT}${path}${typeof addonId === 'string' ? `#${addonId}` : ''}`;
-    window.open(url);
-};
 
 const messages = defineMessages({
     defaultTitle: {
@@ -84,11 +80,28 @@ class Interface extends React.Component {
     constructor (props) {
         super(props);
         this.handleUpdateProjectTitle = this.handleUpdateProjectTitle.bind(this);
+        this.handleClickAddonSettings = this.handleClickAddonSettings.bind(this);
+        this.handleCloseAddonSettings = this.handleCloseAddonSettings.bind(this);
+        this.handleExportAddonSettings = this.handleExportAddonSettings.bind(this);
+        this.state = {addonSettingsOpen: false};
     }
     componentDidUpdate (prevProps) {
         if (prevProps.isLoading && !this.props.isLoading) {
             loadServiceWorker();
         }
+    }
+    handleClickAddonSettings (addonId) {
+        if (typeof addonId === 'string') {
+            location.hash = addonId;
+        }
+        this.setState({addonSettingsOpen: true});
+    }
+    handleCloseAddonSettings () {
+        this.setState({addonSettingsOpen: false});
+    }
+    handleExportAddonSettings (settings) {
+        const blob = new Blob([JSON.stringify(settings)]);
+        downloadBlob('turbowarp-addon-settings.json', blob);
     }
     handleUpdateProjectTitle (title, isDefault) {
         if (isDefault || !title) {
@@ -126,6 +139,13 @@ class Interface extends React.Component {
                 dir={isRtl ? 'rtl' : 'ltr'}
             >
                 <TWWindchimeSubmitter />
+                {this.state.addonSettingsOpen && (
+                    <AddonSettings
+                        inline
+                        onClose={this.handleCloseAddonSettings}
+                        onExportSettings={this.handleExportAddonSettings}
+                    />
+                )}
                 {isHomepage ? (
                     <div className={styles.menu}>
                         <WrappedMenuBar
@@ -133,7 +153,7 @@ class Interface extends React.Component {
                             canManageFiles
                             canChangeTheme
                             enableSeeInside
-                            onClickAddonSettings={handleClickAddonSettings}
+                            onClickAddonSettings={this.handleClickAddonSettings}
                         />
                     </div>
                 ) : null}
