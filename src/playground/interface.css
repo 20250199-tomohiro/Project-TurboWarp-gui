@@ -102,7 +102,9 @@ a {
     flex-direction: row;
     align-items: stretch;
     overflow: hidden;
-    /* Let the site's fixed navigation remain visible above the addon drawer. */
+    /* Reserve the complete site header above both columns, keeping it visible. */
+    box-sizing: border-box;
+    padding-top: 100px;
     background-color: transparent;
 }
 .addon-settings-open > .center {
