@@ -1,22 +1,39 @@
-name: CI
+name: CI and mirror deploy
 
 on:
   push:
+    branches: [develop]
   pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-      with:
-        persist-credentials: false
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 22
-        cache: npm
-    - run: npm ci
-    - run: npm run build
-    - run: npm run test:unit
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:unit
+
+  notify-mirror:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger mirror deployment
+        env:
+          GH_TOKEN: ${{ secrets.MIRROR_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::MIRROR_DEPLOY_TOKEN is not configured in the GUI repository."
+            exit 1
+          fi
+          gh api --method POST repos/20250199-tomohiro/Project-TurboWarp/dispatches \
+            -f event_type=gui-updated \
+            -f client_payload[ref]=${GITHUB_SHA}
