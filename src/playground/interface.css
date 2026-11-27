@@ -102,6 +102,8 @@ a {
     flex-direction: row;
     align-items: stretch;
     overflow: hidden;
+    /* Let the site's fixed navigation remain visible above the addon drawer. */
+    background-color: transparent;
 }
 .addon-settings-open > .center {
     flex: 1 1 50%;
