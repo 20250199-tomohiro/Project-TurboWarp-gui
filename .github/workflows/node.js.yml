@@ -35,5 +35,4 @@ jobs:
             exit 1
           fi
           gh api --method POST repos/20250199-tomohiro/Project-TurboWarp/dispatches \
-            -f event_type=gui-updated \
-            -f client_payload[ref]=${GITHUB_SHA}
+            -f event_type=gui-updated 
