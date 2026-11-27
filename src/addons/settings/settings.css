@@ -600,9 +600,9 @@ a:active, a:focus {
     width: 50%;
     min-width: 0;
     max-width: none;
-    /* Keep the drawer below the site's fixed navigation bar. */
-    margin-top: 100px;
-    height: calc(100% - 100px);
+    /* The app's navigation bar is 58px tall inside the browser viewport. */
+    margin-top: 58px;
+    height: calc(100% - 58px);
     min-height: 0;
     box-sizing: border-box;
     overflow: hidden;
