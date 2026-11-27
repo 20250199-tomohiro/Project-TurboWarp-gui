@@ -94,3 +94,19 @@ a {
 .footer-section > * {
     margin-bottom: 10px;
 }
+
+
+/* Keep the editor and addon drawer in separate, non-overlapping columns. */
+.addon-settings-open {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    overflow: hidden;
+}
+.addon-settings-open > .center {
+    flex: 1 1 50%;
+    width: auto !important;
+    min-width: 0;
+    height: 100%;
+    overflow: auto;
+}
