@@ -1085,9 +1085,10 @@ class AddonSettingsComponent extends React.Component {
             manifest
         }));
         return (
-            <div className={styles.container}>
+            <div className={classNames(styles.container, {[styles.inline]: this.props.inline})}>
                 <div className={styles.header}>
                     <div className={styles.section}>
+                        {this.props.inline && <button className={styles.inlineClose} onClick={this.props.onClose} aria-label="Close">×</button>}
                         <div className={styles.searchContainer}>
                             <input
                                 className={styles.searchInput}
@@ -1173,7 +1174,9 @@ class AddonSettingsComponent extends React.Component {
     }
 }
 AddonSettingsComponent.propTypes = {
-    onExportSettings: PropTypes.func
+    onExportSettings: PropTypes.func,
+    inline: PropTypes.bool,
+    onClose: PropTypes.func
 };
 
 export default AddonSettingsComponent;
