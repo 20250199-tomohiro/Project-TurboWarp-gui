@@ -588,3 +588,45 @@ a:active, a:focus {
         transform: translateY(0);
     }
 }
+
+/* In-editor addon drawer */
+.inline {
+    position: fixed;
+    z-index: 100000;
+    top: 0;
+    right: 0;
+    width: 50vw;
+    min-width: 420px;
+    max-width: 760px;
+    height: 100vh;
+    box-shadow: -6px 0 24px rgba(0, 0, 0, .28);
+    border-left: 1px solid $ui-black-transparent;
+}
+.inline .header {
+    padding-right: 58px;
+}
+.inline-close {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: inherit;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+.inline-close:hover {
+    background: $ui-black-transparent;
+}
+@media (max-width: 700px) {
+    .inline {
+        width: 100vw;
+        min-width: 0;
+        max-width: none;
+    }
+}
