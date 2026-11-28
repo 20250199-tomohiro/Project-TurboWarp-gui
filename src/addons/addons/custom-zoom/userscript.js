@@ -18,6 +18,19 @@ export default async function ({ addon, console }) {
 
     if (addon.tab.editorMode !== "editor") return;
 
+    if (addon.self.disabled) {
+      // 無効化時は、ズーム設定を既定値に戻し、自動非表示の仕組みを外す
+      const zoomOptions = Blockly.getMainWorkspace().options.zoomOptions;
+      zoomOptions.maxScale = 4;
+      zoomOptions.minScale = 0.25;
+      zoomOptions.startScale = 0.675;
+      zoomOptions.scaleSpeed = 1.2;
+      const group = getZoomControls();
+      if (group) group.classList.remove("sa-custom-zoom-hidden");
+      customZoomAreaElement.remove();
+      return;
+    }
+
     Blockly.getMainWorkspace().options.zoomOptions.maxScale = addon.settings.get("maxZoom") / 100;
     Blockly.getMainWorkspace().options.zoomOptions.minScale = addon.settings.get("minZoom") / 100;
     Blockly.getMainWorkspace().options.zoomOptions.startScale = addon.settings.get("startZoom") / 100;
@@ -67,6 +80,8 @@ export default async function ({ addon, console }) {
     window.dispatchEvent(new Event("resize"));
   }
   addon.settings.addEventListener("change", update);
+  addon.self.addEventListener("disabled", update);
+  addon.self.addEventListener("reenabled", update);
   window.addEventListener("resize", onResize);
   while (true) {
     await addon.tab.waitForElement(".blocklyZoom", {
