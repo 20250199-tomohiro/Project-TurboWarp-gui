@@ -258,9 +258,8 @@ class SettingsStore extends EventTargetShim {
         }
         this.saveToLocalStorage();
         if (enabled !== oldValue) {
-            // Dynamic enable is always supported.
-            // Dynamic disable requires addon support.
-            const supportsDynamic = enabled ? true : !!manifest.dynamicDisable;
+            // このミラーでは、無効化も再読み込みなしで反映する(スタイルを外し、'disabled' イベントを通知する)。
+            const supportsDynamic = true;
             this.dispatchEvent(new CustomEvent('setting-changed', {
                 detail: {
                     addonId,
@@ -443,7 +442,7 @@ class SettingsStore extends EventTargetShim {
                 // Dynamic enable is always supported.
                 const dynamicEnable = !oldSettings.enabled && newSettings.enabled;
                 // Dynamic disable requires addon support.
-                const dynamicDisable = !!manifest.dynamicDisable && oldSettings.enabled && !newSettings.enabled;
+                const dynamicDisable = oldSettings.enabled && !newSettings.enabled;
                 // Clone to avoid pass-by-reference issues
                 this.store[addonId] = JSON.parse(JSON.stringify(newSettings));
                 this.dispatchEvent(new CustomEvent('addon-changed', {
