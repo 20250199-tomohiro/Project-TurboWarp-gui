@@ -96,21 +96,21 @@ a {
 }
 
 
-/* Keep the editor and addon drawer in separate, non-overlapping columns. */
+/* アドオンメニューはナビゲーションバーの下に置き、エディターの本体(ブロック・ステージ)だけを右半分に寄せる。 */
 .addon-settings-open {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    overflow: hidden;
     box-sizing: border-box;
     padding-top: 0;
     background-color: transparent;
 }
 .addon-settings-open > .center {
-    flex: 1 1 50%;
-    width: auto !important;
-    min-width: 0;
-    height: auto;
-    min-height: 0;
-    overflow: auto;
+    width: 100% !important;
+    height: 100%;
+}
+.addon-settings-open [class*="gui_body-wrapper"] {
+    margin-left: 50%;
+}
+@media (max-width: 700px) {
+    .addon-settings-open [class*="gui_body-wrapper"] {
+        margin-left: 50%;
+    }
 }
