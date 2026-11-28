@@ -297,19 +297,24 @@
 .more-navigation[open] .more-navigation-menu {
     display: flex;
 }
-.more-navigation-menu a {
+.more-navigation-menu a,
+.more-navigation-menu a:link,
+.more-navigation-menu a:visited,
+.more-navigation-menu a:active {
     display: inline-flex;
     align-items: center;
     padding: 0 .85rem;
     border-radius: 3px;
-    color: $menu-bar-foreground;
+    color: $menu-bar-foreground !important;
+    -webkit-text-fill-color: $menu-bar-foreground;
     text-decoration: none;
     white-space: nowrap;
 }
 .more-navigation-menu a:hover,
 .more-navigation-menu a:focus-visible {
     background-color: $ui-black-transparent;
-    color: $menu-bar-foreground;
+    color: $menu-bar-foreground !important;
+    -webkit-text-fill-color: $menu-bar-foreground;
     outline: none;
 }
 .menu-bar:has(.more-navigation[open]) {
