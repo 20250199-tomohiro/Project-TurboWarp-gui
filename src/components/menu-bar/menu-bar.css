@@ -102,8 +102,25 @@
 }
 
 .feedback-link {
-    color: $menu-bar-background;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 34px;
+    box-sizing: border-box;
+    padding: 0 .85rem;
+    border-radius: 4px;
+    background-color: $motion-primary;
+    color: white !important;
+    font-weight: bold;
     text-decoration: none;
+    white-space: nowrap;
+}
+.feedback-link:hover,
+.feedback-link:focus-visible {
+    filter: brightness(.94);
+    color: white !important;
+    text-decoration: none;
+    outline: none;
 }
 
 .feedback-button {
@@ -332,17 +349,7 @@
     filter: brightness(.94);
     color: white;
 }
-.feedback-button {
-    background-color: $menu-bar-background !important;
-    border-color: $menu-bar-foreground !important;
-    color: $menu-bar-foreground !important;
-    height: 34px;
-}
-.feedback-button:hover {
-    background-color: $menu-bar-background !important;
-    color: $menu-bar-foreground !important;
-    filter: brightness(.96);
-}
+
 @media only screen and (max-width: 700px) {
     .more-navigation-menu {
         overflow-x: auto;
