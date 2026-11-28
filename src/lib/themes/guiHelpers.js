@@ -35,6 +35,10 @@ const evaluateCSS = css => {
  */
 const applyGuiColors = theme => {
     const doc = document.documentElement;
+
+    // Expose the active GUI mode for theme-aware mirror navigation styles.
+    // CSS variables alone cannot be reliably used as a selector.
+    doc.setAttribute('data-tw-gui-theme', theme.gui);
     if (!window.__mirrorAppearanceStorageSync) {
         window.__mirrorAppearanceStorageSync = true;
         window.addEventListener('storage', event => {
