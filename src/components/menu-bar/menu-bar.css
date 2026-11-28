@@ -339,15 +339,31 @@
     min-height: calc(#{$menu-bar-height} * 2);
     align-items: flex-start;
 }
-.more-navigation-menu a.new-project-navigation {
+.more-navigation-menu a.new-project-navigation,
+.more-navigation-menu a.new-project-navigation:link,
+.more-navigation-menu a.new-project-navigation:visited,
+.more-navigation-menu a.new-project-navigation:active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 34px;
+    padding: 0 .85rem;
+    border-radius: 4px;
     background-color: $motion-primary;
-    color: white;
+    color: white !important;
+    -webkit-text-fill-color: white;
     font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
 }
 .more-navigation-menu a.new-project-navigation:hover,
 .more-navigation-menu a.new-project-navigation:focus-visible {
     filter: brightness(.94);
-    color: white;
+    color: white !important;
+    -webkit-text-fill-color: white;
+    text-decoration: none;
+    outline: none;
 }
 
 @media only screen and (max-width: 700px) {
