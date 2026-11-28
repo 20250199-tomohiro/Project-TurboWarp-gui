@@ -963,7 +963,7 @@ class AddonSettingsComponent extends React.Component {
     handleSettingStoreChanged (e) {
         const {addonId, settingId, value} = e.detail;
         // If channels are unavailable, every change requires reload.
-        const reloadRequired = e.detail.reloadRequired || !Channels.changeChannel;
+        const reloadRequired = e.detail.reloadRequired || (!this.props.inline && !Channels.changeChannel);
         this.setState(state => {
             const newState = {
                 [addonId]: {
@@ -977,11 +977,28 @@ class AddonSettingsComponent extends React.Component {
             }
             return newState;
         });
-        if (!reloadRequired) {
+        if (this.props.inline) {
+            // エディターと同じページ内で開いている場合、BroadcastChannel のメッセージは自分自身には届かない。
+            // そのため、再読み込みなしで反映できる変更は、ここで直接エディター側のアドオンへ伝える。
+            if (!reloadRequired) {
+                const isEnabledChange = settingId === 'enabled';
+                SettingsStore.dispatchEvent(new CustomEvent('addon-changed', {
+                    detail: {
+                        addonId,
+                        dynamicEnable: isEnabledChange && value === true,
+                        dynamicDisable: isEnabledChange && value === false
+                    }
+                }));
+            }
+        } else if (!reloadRequired) {
             postThrottledSettingsChange(SettingsStore.store);
         }
     }
     handleReloadNow () {
+        if (this.props.inline) {
+            location.reload();
+            return;
+        }
         // Value posted does not matter
         Channels.reloadChannel.postMessage(0);
         this.setState({
@@ -1117,7 +1134,7 @@ class AddonSettingsComponent extends React.Component {
                     </div>
                     {this.state.dirty && (
                         <Dirty
-                            onReloadNow={Channels.reloadChannel ? this.handleReloadNow : null}
+                            onReloadNow={(this.props.inline || Channels.reloadChannel) ? this.handleReloadNow : null}
                         />
                     )}
                 </div>
