@@ -396,3 +396,29 @@
     }
 }
 
+
+
+/* Light theme: outlined white actions with the currently selected theme accent. */
+:global(:root[data-mirror-theme="light"]) .feedback-link,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation:link,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation:visited,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation:active {
+    background: white !important;
+    background-color: white !important;
+    border: 1px solid $motion-primary !important;
+    color: $motion-primary !important;
+    -webkit-text-fill-color: $motion-primary !important;
+    text-decoration: none !important;
+}
+:global(:root[data-mirror-theme="light"]) .feedback-link:hover,
+:global(:root[data-mirror-theme="light"]) .feedback-link:focus-visible,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation:hover,
+:global(:root[data-mirror-theme="light"]) .more-navigation-menu a.new-project-navigation:focus-visible {
+    background: white !important;
+    background-color: white !important;
+    border-color: $motion-primary !important;
+    color: $motion-primary !important;
+    -webkit-text-fill-color: $motion-primary !important;
+    filter: brightness(.96);
+}
