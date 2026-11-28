@@ -102,9 +102,8 @@ a {
     flex-direction: row;
     align-items: stretch;
     overflow: hidden;
-    /* The host site header is 58px tall; reserve only that space. */
     box-sizing: border-box;
-    padding-top: 58px;
+    padding-top: 0;
     background-color: transparent;
 }
 .addon-settings-open > .center {
